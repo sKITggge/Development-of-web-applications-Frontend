@@ -1,26 +1,42 @@
-import { useState } from 'react'
-import { postsApi } from '../lib/api'
+import { useState, type ComponentType } from 'react'
 import SourceCard from './SourceCard'
 import SourceForm from './SourceForm'
+import type { Source } from '../lib/types'
 
-export default function SourcesList() {
-  const { data: sources, error, isLoading } = postsApi.useGetSourcesQuery()
+interface SourceListProps {
+  title: string
+  sources: Source[]
+  isError: boolean
+  isLoading: boolean
+  canAddSource: boolean
+  ActionForm?: ComponentType<{ source: Source; handleClose: () => void }>
+}
+
+export default function SourcesList({
+  title,
+  sources,
+  isError,
+  isLoading,
+  canAddSource,
+  ActionForm
+}: SourceListProps) {
   const [showForm, setShowForm] = useState(false)
 
   if (isLoading) {
     return (
-      <section className="bg-[var(--card-bg)] rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Sources</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <section className="bg-[var(--card-bg)] rounded-sm shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+        <div className="flex gap-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="animate-pulse">
+            <div key={i} className="min-w-80 animate-pulse">
               <div className="bg-gray-200 rounded-lg p-4 h-32">
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-10 h-10 flex-shrink-0 bg-gray-300 rounded-full"></div>
-                  <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+                  <div className="h-6 bg-gray-300 rounded w-full mb-2"></div>
                 </div>
-                <div className="h-3 bg-gray-300 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h-2 bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h-2 bg-gray-300 rounded w-full mb-2"></div>
+                <div className="h- bg-gray-300 rounded w-full mb-2"></div>
               </div>
             </div>
           ))}
@@ -29,10 +45,10 @@ export default function SourcesList() {
     )
   }
 
-  if (error) {
+  if (isError) {
     return (
-      <section className="bg-[var(--card-bg)] rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Sources</h2>
+      <section className="bg-[var(--card-bg)] rounded-sm shadow-md p-6">
+        <h2 className="text-xl font-semibold mb-4">{title}</h2>
         <span className="text-red-500 text-center py-8">
           Error loading sources
         </span>
@@ -49,32 +65,38 @@ export default function SourcesList() {
         />
       )}
 
-      <section className="bg-[var(--card-bg)] rounded-lg shadow-md p-6">
+      <section className="bg-[var(--surface)] p-6 rounded-sm border border-[var(--border)]">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Sources</h2>
+          <h2 className="text-xl font-semibold">{title}</h2>
           <div className="flex gap-4">
             <span className="text-gray-500 bg-gray-100 px-3 py-1 rounded-full text-center">
-              {sources?.length || 0}{' '}
-              {sources?.length === 1 ? 'source' : 'sources'}
+              {sources?.length || 0}
+              {sources?.length === 1 ? ' source' : ' sources'}
             </span>
-            <button
-              onClick={() => setShowForm(true)}
-              className="rounded-full px-3 py-1 border-[1px] border-[var(--border)] 
+            {canAddSource && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="rounded-full px-3 py-1 border border-[var(--border)] 
               hover:border-[var(--link-hover)] hover:text-[var(--link-hover)] cursor-pointer"
-            >
-              Add Source
-            </button>
+              >
+                Add Source
+              </button>
+            )}
           </div>
         </div>
 
         {!sources || sources.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No sources found. Add your first source above.
+          <div className="text-center pb-8 text-gray-500">
+            No sources found.
           </div>
         ) : (
           <div className="flex gap-4 pb-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             {sources.map((source) => (
-              <SourceCard key={source.id} source={source} />
+              <SourceCard
+                key={source.id}
+                source={source}
+                ActionForm={ActionForm}
+              />
             ))}
           </div>
         )}

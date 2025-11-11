@@ -1,9 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import SourcesList from '../components/SourcesList'
-import PostsContainer from '../components/PostsContainer'
-import { postsApi } from '../lib/api'
-import Fallback from '../components/Fallback'
 import { useEffect, useState } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+import { useGetPostsQuery } from '../lib/api'
+import Fallback from '../components/Fallback'
+import PostsContainer from '../components/PostsContainer'
 import Pagination from '../components/Pagination'
 
 export const Route = createFileRoute('/')({
@@ -18,8 +17,10 @@ function Index() {
   const [limit, setLimit] = useState<number>(10)
   const [offset, setOffset] = useState<number>(0)
 
-  const { data, isError, isLoading, isFetching, refetch } =
-    postsApi.useGetPostsQuery({ limit, offset })
+  const { data, isError, isLoading, isFetching, refetch } = useGetPostsQuery({
+    limit,
+    offset,
+  })
 
   useEffect(() => {
     refetch()
@@ -64,7 +65,6 @@ function Index() {
     <>
       <h1>Latest News</h1>
       <div className="flex flex-col gap-6">
-        <SourcesList />
         <PostsContainer data={data.posts} />
         <Pagination
           postsCount={data.meta.total}

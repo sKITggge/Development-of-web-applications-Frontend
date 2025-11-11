@@ -1,4 +1,4 @@
-import type { LoginFormData, RegisterFormData, ValidationErrors } from "./types"
+import type { LoginFormData, RegisterFormData, ValidationErrors } from './types'
 
 export function isHtmlContent(text: string): boolean {
   const htmlPattern = /<([a-z][a-z0-9]*)[^>]*?(\/)?>|&[a-z]+;/i
@@ -62,4 +62,11 @@ export const validateLoginForm = (data: LoginFormData): ValidationErrors => {
   }
 
   return errors
+}
+
+export const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  })
 }

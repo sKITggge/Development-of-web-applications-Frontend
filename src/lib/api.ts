@@ -4,7 +4,6 @@ import type {
   Category,
   LoginRequest,
   PaginatedPosts,
-  Post,
   RegisterRequest,
   Source,
   UserProfile,
@@ -50,6 +49,11 @@ export const postsApi = createApi({
       providesTags: ['Sources'],
     }),
 
+    getPendingSources: build.query<Source[], void>({
+      query: () => `api/moderateSources`,
+      providesTags: ['Sources'],
+    }),
+
     addSource: build.mutation<Source, Omit<Source, 'id' | 'updated_at' | 'created_at'>>({
       query: (newSource) => ({
         url: 'api/sources',
@@ -62,6 +66,23 @@ export const postsApi = createApi({
     getCategories: build.query<Category[], void>({
       query: () => `api/categories`,
       providesTags: ['Categories'],
+    }),
+
+    deleteSource: build.mutation<{ message: string }, string>({
+      query: (id) => ({
+        url: `api/moderateSources/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Sources']
+    }),
+
+    updateSource: build.mutation<{ message: string }, Source>({
+      query: (source: Source) => ({
+        url: `api/moderateSources/${source.id}`,
+        method: 'PUT',
+        body: source
+      }),
+      invalidatesTags: ['Sources']
     }),
 
     getFilteredPosts: build.query<PaginatedPosts, { categories: string[]; sources: string[], limit: number; offset: number }>({
@@ -133,18 +154,12 @@ export const postsApi = createApi({
       providesTags: ['User'],
     }),
 
-    getTrackedCategories: build.query<
-      { categories: Category[]; count: number },
-      void
-    >({
+    getTrackedCategories: build.query<{ categories: Category[]; count: number }, void>({
       query: () => 'api/profile/tracked-categories',
       providesTags: ['User'],
     }),
 
-    updateTrackedCategories: build.mutation<
-      { message: string },
-      { category_ids: string[] }
-    >({
+    updateTrackedCategories: build.mutation<{ message: string }, { category_ids: string[] }>({
       query: (categoryIds) => ({
         url: 'api/profile/categories',
         method: 'PUT',
@@ -158,12 +173,7 @@ export const postsApi = createApi({
       providesTags: ['User'],
     }),
 
-    updateTrackedSources: build.mutation<
-      {
-        message: string
-      },
-      { source_ids: string[] }
-    >({
+    updateTrackedSources: build.mutation<{ message: string }, { source_ids: string[] }>({
       query: (sourceIds) => ({
         url: 'api/profile/sources',
         method: 'PUT',
@@ -188,8 +198,11 @@ export const postsApi = createApi({
 export const {
   useGetPostsQuery,
   useGetSourcesQuery,
+  useGetPendingSourcesQuery,
   useAddSourceMutation,
   useGetCategoriesQuery,
+  useUpdateSourceMutation,
+  useDeleteSourceMutation,
   useGetFilteredPostsQuery,
   useRegisterMutation,
   useLoginMutation,
