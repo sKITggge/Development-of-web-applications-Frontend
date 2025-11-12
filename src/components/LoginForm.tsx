@@ -6,7 +6,7 @@ import type { ValidationErrors, LoginFormData } from '../lib/types'
 import { AuthContext } from '../contexts/AuthContext'
 
 export default function LoginForm() {
-  const [login, { isLoading }] = useLoginMutation()
+  const [login, { isLoading, isError }] = useLoginMutation()
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
   const navigate = useNavigate()
 
@@ -81,9 +81,9 @@ export default function LoginForm() {
               placeholder="Enter your email"
             />
             {validationErrors.email && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.email.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
@@ -110,9 +110,9 @@ export default function LoginForm() {
               placeholder="Enter your password"
             />
             {validationErrors.password && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.password.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
@@ -122,11 +122,15 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-[var(--accent)] py-3 px-4 rounded-sm font-semibold 
+          className="w-full bg-[var(--accent)] py-3 px-4 rounded-sm font-semibold text-white
           hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
         >
           Sign In
         </button>
+
+        {isError && (
+          <p className="mt-1 !text-[var(--status-error)]">Something went wrong</p>
+        )}
 
         <div className="text-center">
           <p className="text-sm text-[var(--muted)]">

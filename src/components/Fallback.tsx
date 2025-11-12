@@ -19,8 +19,8 @@ export default function Fallback({
     color === 'error'
       ? '--status-error'
       : color === 'warning'
-      ? '--status-warning'
-      : '--status-info'
+        ? '--status-warning'
+        : '--status-info'
   const bgColor = `var(${varName})`
 
   const getIcon = () => {
@@ -126,11 +126,7 @@ export default function Fallback({
             {actionText && onAction && (
               <button
                 onClick={onAction}
-                className="mt-4 px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 active:scale-95"
-                style={{
-                  backgroundColor: bgColor,
-                  color: 'var(--bg)',
-                }}
+                className={`mt-4 px-6 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 active:scale-95 bg-[${bgColor}] text-[var(--bg)]`}
               >
                 {actionText}
               </button>

@@ -6,7 +6,7 @@ import type { ValidationErrors, RegisterFormData } from '../lib/types'
 import { AuthContext } from '../contexts/AuthContext'
 
 export default function RegisterForm() {
-  const [register, { isLoading }] = useRegisterMutation()
+  const [register, { isLoading, isError }] = useRegisterMutation()
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({})
   const navigate = useNavigate()
 
@@ -17,7 +17,7 @@ export default function RegisterForm() {
     setValidationErrors({})
 
     const formData = new FormData(event.currentTarget)
-    
+
     const formValues: RegisterFormData = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
@@ -40,7 +40,6 @@ export default function RegisterForm() {
 
       authContext?.toggleAuthed(true)
       navigate({ to: '/' })
-      
     } catch (err) {
       console.error('Registration failed:', err)
     }
@@ -64,10 +63,7 @@ export default function RegisterForm() {
       >
         <div className="space-y-4">
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm mb-2"
-            >
+            <label htmlFor="name" className="block text-sm mb-2">
               Full Name
             </label>
             <input
@@ -84,19 +80,16 @@ export default function RegisterForm() {
               placeholder="Enter your full name"
             />
             {validationErrors.name && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.name.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
           </div>
 
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm mb-2"
-            >
+            <label htmlFor="email" className="block text-sm mb-2">
               Email Address
             </label>
             <input
@@ -113,19 +106,16 @@ export default function RegisterForm() {
               placeholder="Enter your email"
             />
             {validationErrors.email && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.email.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm mb-2"
-            >
+            <label htmlFor="password" className="block text-sm mb-2">
               Password
             </label>
             <input
@@ -142,19 +132,16 @@ export default function RegisterForm() {
               placeholder="Create a password (min. 8 characters)"
             />
             {validationErrors.password && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.password.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
           </div>
 
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm mb-2"
-            >
+            <label htmlFor="confirmPassword" className="block text-sm mb-2">
               Confirm Password
             </label>
             <input
@@ -171,9 +158,9 @@ export default function RegisterForm() {
               placeholder="Confirm your password"
             />
             {validationErrors.confirmPassword && (
-              <div className="mt-1 text-[var(--status-error)]">
+              <div className="mt-1">
                 {validationErrors.confirmPassword.map((error, index) => (
-                  <p key={index}>{error}</p>
+                  <p className="!text-[var(--status-error)]" key={index}>{error}</p>
                 ))}
               </div>
             )}
@@ -188,6 +175,12 @@ export default function RegisterForm() {
         >
           Create Account
         </button>
+
+        {isError && (
+          <p className="mt-1 !text-[var(--status-error)]">
+            Something went wrong
+          </p>
+        )}
 
         <div className="text-center">
           <p className="text-sm text-[var(--muted)]">

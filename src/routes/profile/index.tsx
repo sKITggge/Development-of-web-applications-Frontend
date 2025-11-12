@@ -10,6 +10,7 @@ import { SourcesForm } from '../../components/SourcesForm'
 import SourcesList from '../../components/SourcesList'
 import EditSourceModal from '../../components/EditSourceModal'
 import ProfileCard from '../../components/ProfileCard'
+import Fallback from '../../components/Fallback'
 
 export const Route = createFileRoute('/profile/')({
   component: RouteComponent,
@@ -31,7 +32,6 @@ function Index() {
     data: userData,
     isError: isUserError,
     isLoading: isUserLoading,
-    isFetching: isUserFetching,
   } = useGetProfileQuery()
 
   const {
@@ -46,19 +46,30 @@ function Index() {
     isLoading: isPendingSourcesLoading,
   } = useGetPendingSourcesQuery()
 
-  if (isUserError || isUserLoading || isUserFetching || !userData) {
+  if (isUserLoading) {
     return (
-      <div>
-        isError {isUserError}
-        isLoading {isUserLoading}
-        isFetching {isUserFetching}
-      </div>
+      <Fallback
+        message="Looading your data and preferences..."
+        title="Loading Content"
+        color="info"
+        details="This should only take a moment"
+      />
+    )
+  }
+
+  if (isUserError || !userData) {
+    return (
+      <Fallback
+        message="Check your Internet connection or try later"
+        title="Failed to load user data"
+        color="error"
+      />
     )
   }
 
   return (
     <div className="flex flex-col gap-4">
-      <ProfileCard user={userData}/>
+      <ProfileCard user={userData} />
 
       <div className="flex flex-col gap-4">
         {sources && (
@@ -73,7 +84,7 @@ function Index() {
             }
           />
         )}
-        {pendingSources && (
+        {userData.role == 'moderator' && pendingSources && (
           <SourcesList
             title={'Unpublished Sources'}
             sources={pendingSources}

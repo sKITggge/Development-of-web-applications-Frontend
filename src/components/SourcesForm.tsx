@@ -51,10 +51,12 @@ export function SourcesForm() {
     return (
       <div className="p-6 bg-[var(--surface)] rounded-sm border border-[var(--border)]">
         <div className="animate-pulse">
-          <div className="h-6 bg-[var(--card-bg)] rounded w-1/3 mb-4"></div>
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-4 bg-[var(--card-bg)] rounded"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="h-8 flex-shrink-0 w-full bg-[var(--card-bg)] rounded"
+              ></div>
             ))}
           </div>
         </div>
@@ -65,8 +67,8 @@ export function SourcesForm() {
   if (isUserError || isSourcesError) {
     return (
       <div className="p-6 bg-[var(--surface)] rounded-sm border border-[var(--border)]">
-        <div className="text-[var(--status-error)] text-center">
-          Error loading data. Please try again.
+        <div className="text-[var(--status-error)]">
+          Error loading sources. Try again later.
         </div>
       </div>
     )
@@ -131,7 +133,7 @@ export function SourcesForm() {
             disabled:opacity-50 disabled:cursor-not-allowed rounded-sm
           `}
         >
-            Save Preferences
+          Save Preferences
         </button>
       </div>
     </form>
