@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { postsApi } from '../lib/api'
+import { useAddSourceMutation } from '../lib/api'
 
 interface SourceFormProps {
   onSuccess?: () => void
@@ -7,7 +7,7 @@ interface SourceFormProps {
 }
 
 export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
-  const [addSource, { isLoading, error }] = postsApi.useAddSourceMutation()
+  const [addSource, { isLoading, error }] = useAddSourceMutation()
   const [formData, setFormData] = useState({
     url: '',
     title: '',
@@ -20,7 +20,7 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
     e.preventDefault()
 
     try {
-      await addSource(formData).unwrap()
+      await addSource(formData)
       setFormData({
         url: '',
         title: '',
@@ -43,7 +43,7 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
   }
 
   return (
-    <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border)] p-6 mb-6">
+    <div className="bg-[var(--card-bg)] rounded-sm border border-[var(--border)] p-6 mb-6">
       <h3 className="text-lg font-semibold text-gray-800 mb-4">
         Add New Source
       </h3>
@@ -65,7 +65,7 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
               onChange={handleChange}
               required
               placeholder="https://feeds.bbci.co.uk/news/rss.xml"
-              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -78,13 +78,12 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
             </label>
             <input
               type="text"
-              id="title"
               name="title"
               value={formData.title}
               onChange={handleChange}
               required
               placeholder="BBC News"
-              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -97,13 +96,12 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
             </label>
             <input
               type="url"
-              id="logo"
               name="logo"
               value={formData.logo}
               onChange={handleChange}
               required
               placeholder="https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif"
-              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -116,12 +114,11 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
             </label>
             <input
               type="number"
-              id="logo_width"
               name="logo_width"
               value={formData.logo_width}
               onChange={handleChange}
               min="1"
-              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -134,52 +131,18 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
             </label>
             <input
               type="number"
-              id="logo_height"
               name="logo_height"
               value={formData.logo_height}
               onChange={handleChange}
               min="1"
-              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-[var(--border)] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        {formData.logo && (
-          <div className="border-t border-[var(--border)] pt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Preview
-            </label>
-            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-              <img
-                src={formData.logo}
-                alt="Logo preview"
-                width={formData.logo_width}
-                height={formData.logo_height}
-                className="rounded-lg"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none'
-                }}
-              />
-              <div>
-                <p className="font-medium text-gray-900">
-                  {formData.title || 'Source Title'}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {formData.url || 'Source URL'}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-800 text-sm">
-              Error:{' '}
-              {'data' in error
-                ? JSON.stringify(error.data)
-                : 'Failed to add source'}
-            </p>
+            <p className="text-red-800 text-sm">Failed to add source</p>
           </div>
         )}
 
@@ -189,7 +152,7 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
               type="button"
               onClick={onCancel}
               disabled={isLoading}
-              className="px-4 py-2 text-gray-700 border border-[var(--border)] rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50"
+              className="px-4 py-2 text-gray-700 border border-[var(--border)] rounded-md hover:bg-gray-50 disabled:opacity-50"
             >
               Cancel
             </button>
@@ -199,9 +162,9 @@ export default function SourceForm({ onSuccess, onCancel }: SourceFormProps) {
             disabled={
               isLoading || !formData.url || !formData.title || !formData.logo
             }
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Adding...' : 'Add Source'}
+            Add Source
           </button>
         </div>
       </form>

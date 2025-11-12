@@ -32,7 +32,7 @@ export interface Source {
   logo: string
   logo_width: number
   logo_height: number
-  categories: Category[]
+  created_at: Date
 }
 
 export interface Category {
@@ -68,6 +68,7 @@ export interface UserProfile {
   email: string
   tracked_categories: string[]
   tracked_sources: string[]
+  role: "user" | "moderator"
   created_at: string
 }
 
