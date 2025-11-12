@@ -1,6 +1,6 @@
+import { useState } from 'react'
 import type { ComponentType } from 'react'
 import type { Source } from '../lib/types'
-import { useState } from 'react'
 import { formatDate } from '../lib/utils'
 
 interface SourceCardProps {

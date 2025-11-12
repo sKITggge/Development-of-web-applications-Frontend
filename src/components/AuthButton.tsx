@@ -1,6 +1,6 @@
+import { useContext } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { removeToken } from '../lib/utils'
-import { useContext } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 
 function LoggedOutButtons() {

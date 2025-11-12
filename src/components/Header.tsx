@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import Logo from './Logo'
 import AuthAction from './AuthButton'
-import { Link } from '@tanstack/react-router'
 import ToggleTheme from './ToggleTheme'
 
 export default function Header() {

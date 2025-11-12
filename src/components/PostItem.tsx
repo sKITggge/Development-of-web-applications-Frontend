@@ -1,5 +1,5 @@
-import type { Post } from '../lib/types'
 import { useMemo } from 'react'
+import type { Post } from '../lib/types'
 
 export default function PostItem({ data }: { data: Post }) {
   const date = new Date(data.pubDate).toLocaleString()

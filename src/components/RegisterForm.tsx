@@ -1,6 +1,6 @@
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useRegisterMutation } from '../lib/api'
-import { useContext, useState } from 'react'
 import { validateRegisterForm } from '../lib/utils'
 import type { ValidationErrors, RegisterFormData } from '../lib/types'
 import { AuthContext } from '../contexts/AuthContext'
