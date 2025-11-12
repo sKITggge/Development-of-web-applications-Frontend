@@ -31,8 +31,13 @@ function Index() {
     data: postsData,
     isLoading: isPostsLoading,
     error: isPostsError,
-    refetch
-  } = useGetFilteredPostsQuery({ categories: selectedCategories, sources: selectedSources, limit, offset })
+    refetch,
+  } = useGetFilteredPostsQuery({
+    categories: selectedCategories,
+    sources: selectedSources,
+    limit,
+    offset,
+  })
 
   const { data: userData } = useGetProfileQuery()
 
@@ -88,25 +93,18 @@ function Index() {
     )
   }
 
-  if (!categoriesData && !sourcesData) {
+  if (
+    !categoriesData ||
+    !sourcesData ||
+    !categoriesData ||
+    categoriesData.length === 0
+  ) {
     return (
       <Fallback
         message="Failed to load categories and sources"
         title="No filters"
         color="error"
         actionText="Retry"
-        onAction={refetch}
-      />
-    )
-  }
-
-  if (!categoriesData || categoriesData.length === 0) {
-    return (
-      <Fallback
-        message="No categories have been configured yet. Please contact administration if this persists."
-        title="No Categories Configured"
-        color="warning"
-        actionText="Refresh Data"
         onAction={refetch}
       />
     )
