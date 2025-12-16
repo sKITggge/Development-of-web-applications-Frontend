@@ -123,7 +123,7 @@ function Index() {
       </header>
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="lg:sticky lg:top-6 lg:self-start max-h-[40vh] lg:max-h-[96vh] overflow-y-auto scroll shrink-0 space-y-4">
+        <aside className="lg:sticky lg:top-6 lg:self-start max-h-[40vh] lg:max-h-[96vh] overflow-y-auto scroll shrink-0 space-y-4">
           {!!userData && (
             <button
               onClick={filterByPreferences}
@@ -152,7 +152,7 @@ function Index() {
               handleCategoryChange={handleCategoryChange}
             />
           )}
-        </div>
+        </aside>
 
         <div className="w-full">
           {isPostsLoading && (

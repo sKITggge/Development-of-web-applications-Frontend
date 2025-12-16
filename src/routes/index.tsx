@@ -64,7 +64,7 @@ function Index() {
   return (
     <>
       <h1>Latest News</h1>
-      <div className="flex flex-col gap-6">
+      <main className="flex flex-col gap-6">
         <PostsContainer data={data.posts} />
         <Pagination
           postsCount={data.meta.total}
@@ -73,7 +73,7 @@ function Index() {
           changeLimit={setLimit}
           changeOffset={setOffset}
         />
-      </div>
+      </main>
     </>
   )
 }

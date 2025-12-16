@@ -25,7 +25,7 @@ export default function SourceCard({ source, ActionForm }: SourceCardProps) {
                 alt={source.title}
                 width={source.logo_width || 32}
                 height={source.logo_height || 32}
-                className="rounded-sm flex-shrink-0"
+                className="bg-gray-200 rounded-sm flex-shrink-0"
               />
               <div>
                 <h3

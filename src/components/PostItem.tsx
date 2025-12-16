@@ -18,7 +18,7 @@ export default function PostItem({ data }: { data: Post }) {
         <div
           className={`flex gap-4 flex-col ${data.image ? 'sm:grid sm:grid-cols-[1fr_3fr]' : 'sm:flex'}`}
         >
-          {data.image && <img src={data.image} alt="thumbnail" />}
+          {data.image && <img className='bg-gray-200' src={data.image} alt="thumbnail" />}
           <div>
             <h3 className="text-3xl font-semibold text-[var(--title)]">
               {data.title}
